@@ -1,20 +1,20 @@
 function Durl(options){
   this.options = options || {}
   this.deep_url_var_name = this.options.deep_url_var_name || "durl"
+  this.window = options.window
   this.pm = options.postMassage
 
   if(!this.pm){
-    this.pm = new PostMassage({namespace: 'durl'})
+    this.pm = new PostMassage({namespace: 'durl', window: this.window})
   }
-  this.pm.bind('setDURL', this.setDURL)
-  this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer)
-  
+
   this.options.producer ? this.bootAsProducer() : this.bootAsConsumer()
 }
 
 Durl.prototype.bootAsProducer = function(){
   if(window != parent.window){
     this.log("booting")
+    this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer.bind(this))
     this.pm.call('setDURL', encodeURIComponent(window.location.href))
     var self = this
     $(document).ready(function(){
@@ -30,12 +30,14 @@ Durl.prototype.bootAsProducer = function(){
 },
 
 Durl.prototype.bootAsConsumer = function(){
+  this.log("booting")
+  this.pm.bind('setDURL', this.setDURL.bind(this))
   if("onhashchange" in window.document.body){
     var self = this
     window.addEventListener("hashchange", function(){
-      var durl = this.getDeepPath()
-      this.log('sendDURLFromConsumer: ' + durl)
-      this.pm.call('setDURLFromConsumer', durl)
+      var durl = self.getDeepPath()
+      self.log('sendDURLFromConsumer: ' + durl)
+      self.pm.call('setDURLFromConsumer', durl)
     })
   }
 }
@@ -100,7 +102,7 @@ Durl.prototype.getDeepPath = function() {
 }
 
 Durl.prototype.setDURLFromConsumer = function(path) {
-  if(window.location.pathname + window.location.search + window.location.hash != path){
+  if(window.location.href != path){
     this.log('setDURLFromConsumer: ' + path)
     window.location.replace(path)
   }else{
