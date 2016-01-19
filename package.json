@@ -1,0 +1,28 @@
+{
+  "name": "durl",
+  "version": "1.0.0",
+  "description": "DURL keeps your i-frame's Deep URL stored in the hash fragment of your parent page",
+  "main": "./src/durl.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkasten/durl.git"
+  },
+  "author": "Tyler Kasten",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tkasten/durl/issues"
+  },
+  "homepage": "https://github.com/tkasten/durl#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.2.0",
+    "mocha": "^2.3.4"
+  },
+  "dependencies": {
+    "post-massage": "^1.0.2"
+  }
+}
