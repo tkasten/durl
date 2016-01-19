@@ -23,6 +23,6 @@
     "mocha": "^2.3.4"
   },
   "dependencies": {
-    "post-massage": "^1.0.2"
+    "post-massage": "^1.0.3"
   }
 }
