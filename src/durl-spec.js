@@ -3,6 +3,7 @@
 var chai = require('chai'),
     should = require('chai').should(),
     expect = require('chai').expect(),
+    PostMassage = require('post-massage'),
     Durl = require('../src/durl');
 
 // TODO this mock is getting to elaborate, surely theres
