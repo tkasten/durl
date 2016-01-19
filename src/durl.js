@@ -1,8 +1,8 @@
 function Durl(options){
   this.options = options || {}
   this.deep_url_var_name = this.options.deep_url_var_name || "durl"
-  this.window = options.window
-  this.pm = options.postMassage
+  this.window = this.options.window
+  this.pm = this.options.postMassage
 
   if(!this.pm){
     this.pm = new PostMassage({namespace: 'durl', window: this.window})
