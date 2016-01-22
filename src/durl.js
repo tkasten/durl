@@ -1,3 +1,8 @@
+/*
+ * File: durl.js
+ * Doc: https://github.com/tkasten/durl
+ */
+
 function Durl(options){
   this.options = options || {}
   this.deep_url_var_name = this.options.deep_url_var_name || "durl"
