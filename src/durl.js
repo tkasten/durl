@@ -18,7 +18,7 @@ function Durl(options){
 
 Durl.prototype.bootAsProducer = function(){
   if(window != parent.window){
-    this.log("booting")
+    this.log("booting: " + window.location.href)
     this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer.bind(this))
     this.pm.call('setDURL', encodeURIComponent(window.location.href))
     var self = this
@@ -107,6 +107,7 @@ Durl.prototype.getDeepPath = function() {
 }
 
 Durl.prototype.setDURLFromConsumer = function(path) {
+  path = decodeURIComponent(path)
   if(window.location.href != path){
     this.log('setDURLFromConsumer: ' + path)
     window.location.replace(path)
