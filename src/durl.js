@@ -18,7 +18,7 @@ function Durl(options){
 
 Durl.prototype.bootAsProducer = function(){
   if(window != parent.window){
-    this.log("booting")
+    this.log("booting: " + window.location.href)
     this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer.bind(this))
     this.pm.call('setDURL', encodeURIComponent(window.location.href))
     var self = this
@@ -109,6 +109,15 @@ Durl.prototype.getDeepPath = function() {
 Durl.prototype.setDURLFromConsumer = function(path) {
   if(window.location.href != path){
     this.log('setDURLFromConsumer: ' + path)
+    // this sillyness is in response to receiving a new path from the consumer
+    // that is a double-encoded relative path (has leading encoded '/'). It's
+    // already been decoded once before getting here, and if we still see what
+    // looks like an encoded forward flash, let's decode it again.
+    // Discovered b/c react-router (v 0.11.6) has a double encoding bug:
+    // https://github.com/petehunt/react-router-1/blob/master/CHANGELOG.md
+    if(path.substr(0,3) == "%2F"){
+      path = decodeURIComponent(path)
+    }
     window.location.replace(path)
   }else{
     this.log('refusing to change frame location, path is unchanged: ' + path)
