@@ -148,5 +148,3 @@ if (typeof define === 'function' && define.amd) {
 } else {
   window.Durl = window.Durl || factory()
 }
-
-
