@@ -1,6 +1,6 @@
 {
   "name": "durl",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "DURL keeps your i-frame's Deep URL stored in the hash fragment of your parent page",
   "main": "./src/durl.js",
   "scripts": {
