@@ -107,7 +107,6 @@ Durl.prototype.getDeepPath = function() {
 }
 
 Durl.prototype.setDURLFromConsumer = function(path) {
-  path = decodeURIComponent(path)
   if(window.location.href != path){
     this.log('setDURLFromConsumer: ' + path)
     // this sillyness is in response to receiving a new path from the consumer
