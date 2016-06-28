@@ -22,7 +22,7 @@ Durl.prototype.bootAsProducer = function(){
     this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer.bind(this))
     this.pm.call('setDURL', encodeURIComponent(window.location.href))
     var self = this
-    $(document).ready(function(){
+    document.addEventListener("DOMContentLoaded", function(){
       if("onhashchange" in window.document.body){
         window.addEventListener("hashchange", function(){
           self.pm.call('setDURL', encodeURIComponent(window.location.href))
