@@ -1,6 +1,9 @@
 /*
  * File: durl.js
+ * Version: 1.0.5
+ * Desc: DURL keeps your i-frame's Deep URL stored in the hash fragment of your parent page
  * Doc: https://github.com/tkasten/durl
+ * Author: Tyler Kasten tyler.kasten@gmail.com
  */
 
 function Durl(options){
