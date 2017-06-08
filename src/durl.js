@@ -51,37 +51,37 @@ Durl.prototype.bootAsConsumer = function(){
 }
 
 Durl.prototype.matchDeepPath = function(path) {
-  /**
-    *
-    * DURL will store its durl (deep url) in the consumer's hash fragment in the
-    * form of `this.deep_url_var_name=url_encoded_url`
-    * 
-    * But we don't know how the consumer is using their hash fragment so we try
-    * to make safe, unobtrusive assumptions about how to integrate our data into
-    * their fragment. Consider the following potential use cases on their end:
-    *
-    * TKK TODO - spec these cases (also need more cases/clean-up etc)...
-    *
-    * Hash Bang style followed with traditional path and url variables
-    * www.example.com/page/path?var1=stuff#!/some/path?p1=v1&durl=value!&p2=v2z
-    * www.example.com/page/path?var1=stuff#!/some/path?p1=v1&durl=value!
-    *
-    * Same as above case but no consumer variables mixed with durl
-    * www.example.com/page/path?vars=stuff#!/some/path?durl=value!
-    *
-    * No Bang(!) just right into the variables
-    * www.example.com/page/path#?p1=v2&durl=value!
-    *
-    * Same as above but no consumer variables mixed with durl
-    * www.example.com/page/path#?durl=value!
-    *
-    */
-
   pattern = new RegExp("(\\?|&)" + this.deep_url_var_name + "=([^&\n]*)")
   return pattern.exec(this.vanillaHash()) || '' // [whole match, joiner, url]
 }
 
 Durl.prototype.setDURL = function(new_url) {
+/**
+  *
+  * DURL will store its durl (deep url) in the consumer's hash fragment in the
+  * form of `this.deep_url_var_name=url_encoded_url`
+  * 
+  * But we don't know how the consumer is using their hash fragment so we try
+  * to make safe, unobtrusive assumptions about how to integrate our data into
+  * their fragment. Consider the following potential use cases on their end:
+  *
+  * TKK TODO - spec these cases (also need more cases/clean-up etc)...
+  *
+  * Hash Bang style followed with traditional path and url variables
+  * www.example.com/page/path?var1=stuff#!/some/path?p1=v1&durl=value!&p2=v2z
+  * www.example.com/page/path?var1=stuff#!/some/path?p1=v1&durl=value!
+  *
+  * Same as above case but no consumer variables mixed with durl
+  * www.example.com/page/path?vars=stuff#!/some/path?durl=value!
+  *
+  * No Bang(!) just right into the variables
+  * www.example.com/page/path#?p1=v2&durl=value!
+  *
+  * Same as above but no consumer variables mixed with durl
+  * www.example.com/page/path#?durl=value!
+  *
+  */
+    
   new_url = new_url || ''
   hash = this.vanillaHash()
 
