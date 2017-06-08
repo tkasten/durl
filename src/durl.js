@@ -1,6 +1,6 @@
 /*
  * File: durl.js
- * Version: 1.0.5
+ * Version: 1.0.6
  * Desc: DURL keeps your i-frame's Deep URL stored in the hash fragment of your parent page
  * Doc: https://github.com/tkasten/durl
  * Author: Tyler Kasten tyler.kasten@gmail.com
@@ -81,7 +81,7 @@ Durl.prototype.setDURL = function(new_url) {
   * www.example.com/page/path#?durl=value!
   *
   */
-    
+
   new_url = new_url || ''
   hash = this.vanillaHash()
 
@@ -97,9 +97,35 @@ Durl.prototype.setDURL = function(new_url) {
     hash += hash.indexOf('?') == -1 ? '?' : '&'
     hash += this.deep_url_var_name + "=" + new_url
   }
-
   this.log('replacing location: ' + hash)
-  location.replace('#' + hash)
+  // the following would be ideal but `history` object isn't supported < IE11
+  // history.replaceState(undefined, undefined, "#hash_value")
+
+  // so I did this instead...
+
+  // location.replace('#' + hash)
+
+  // That worked great. No new history transaction or page navigation event.
+  // However if the document has a silly base tag in it like:
+
+  // <base href="http://example.com/">
+
+  // Then this approach behaves as if you said:
+
+  // location.replace('example.com/#hash_value_here')
+
+  // That's cool if you're actually sitting on example.com/, but if you at
+  // a path like example.com/some/page and you:
+
+  // location.replace('#' + hash)
+
+  // it navigate off to that base url plus the hash fragment.
+
+  // This seem obvious when you read it here, but is was a nasty gotcha
+  // if your consumer sets the damned 'base' tag.
+
+  // So anyways, here we just force it to stay local like this:
+  location.replace(window.location.pathname + '#' + hash)
 }
 
 Durl.prototype.getDeepPath = function() {
