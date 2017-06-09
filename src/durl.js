@@ -1,6 +1,6 @@
 /*
  * File: durl.js
- * Version: 1.0.6
+ * Version: 1.0.7
  * Desc: DURL keeps your i-frame's Deep URL stored in the hash fragment of your parent page
  * Doc: https://github.com/tkasten/durl
  * Author: Tyler Kasten tyler.kasten@gmail.com
@@ -125,7 +125,7 @@ Durl.prototype.setDURL = function(new_url) {
   // if your consumer sets the damned 'base' tag.
 
   // So anyways, here we just force it to stay local like this:
-  location.replace(window.location.pathname + '#' + hash)
+  location.replace(window.location.pathname + window.location.search + '#' + hash)
 }
 
 Durl.prototype.getDeepPath = function() {
