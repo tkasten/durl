@@ -51,7 +51,7 @@ Durl.prototype.bootAsConsumer = function(){
 }
 
 Durl.prototype.matchDeepPath = function(path) {
-  pattern = new RegExp("(\\?|&)" + this.deep_url_var_name + "=([^&\n]*)")
+  pattern = new RegExp("(\\?|&)" + this.deep_url_var_name + "=([^\n]*)")
   return pattern.exec(this.vanillaHash()) || '' // [whole match, joiner, url]
 }
 
@@ -60,7 +60,7 @@ Durl.prototype.setDURL = function(new_url) {
   *
   * DURL will store its durl (deep url) in the consumer's hash fragment in the
   * form of `this.deep_url_var_name=url_encoded_url`
-  * 
+  *
   * But we don't know how the consumer is using their hash fragment so we try
   * to make safe, unobtrusive assumptions about how to integrate our data into
   * their fragment. Consider the following potential use cases on their end:
