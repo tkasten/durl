@@ -19,16 +19,29 @@ function Durl(options){
   this.options.producer ? this.bootAsProducer() : this.bootAsConsumer()
 }
 
+// Helper: remove deep-url param from an href and return a normalized URL string
+function stripDeepUrl(href, deep_url_var_name) {
+  const url = new URL(href || window.location.href, window.location.href);
+  url.searchParams.delete(deep_url_var_name);
+  // handle simple hash query like #?durl=...
+  if (url.hash.startsWith('#?')) {
+    const hashParams = new URLSearchParams(url.hash.slice(2));
+    hashParams.delete(deep_url_var_name);
+    url.hash = hashParams.toString() ? `?${hashParams}` : '';
+  }
+  return url.toString();
+}
+
 Durl.prototype.bootAsProducer = function(){
   if(window != parent.window){
     this.log("booting: " + window.location.href)
     this.pm.bind('setDURLFromConsumer', this.setDURLFromConsumer.bind(this))
-    this.pm.call('setDURL', encodeURIComponent(window.location.href))
+    this.pm.call('setDURL', encodeURIComponent(stripDeepUrl(window.location.href, this.deep_url_var_name)))
     var self = this
     document.addEventListener("DOMContentLoaded", function(){
       if("onhashchange" in window.document.body){
         window.addEventListener("hashchange", function(){
-          self.pm.call('setDURL', encodeURIComponent(window.location.href))
+          self.pm.call('setDURL', encodeURIComponent(stripDeepUrl(window.location.href, self.deep_url_var_name)))
         })
       }
     })
@@ -51,7 +64,7 @@ Durl.prototype.bootAsConsumer = function(){
 }
 
 Durl.prototype.matchDeepPath = function(path) {
-  pattern = new RegExp("(\\?|&)" + this.deep_url_var_name + "=([^\n]*)")
+  pattern = new RegExp("(\\?|&)" + this.deep_url_var_name + "=([^&\n]*)")
   return pattern.exec(this.vanillaHash()) || '' // [whole match, joiner, url]
 }
 
@@ -81,7 +94,6 @@ Durl.prototype.setDURL = function(new_url) {
   * www.example.com/page/path#?durl=value!
   *
   */
-
   new_url = new_url || ''
   hash = this.vanillaHash()
 
@@ -97,35 +109,9 @@ Durl.prototype.setDURL = function(new_url) {
     hash += hash.indexOf('?') == -1 ? '?' : '&'
     hash += this.deep_url_var_name + "=" + new_url
   }
+
   this.log('replacing location: ' + hash)
-  // the following would be ideal but `history` object isn't supported < IE11
-  // history.replaceState(undefined, undefined, "#hash_value")
-
-  // so I did this instead...
-
-  // location.replace('#' + hash)
-
-  // That worked great. No new history transaction or page navigation event.
-  // However if the document has a silly base tag in it like:
-
-  // <base href="http://example.com/">
-
-  // Then this approach behaves as if you said:
-
-  // location.replace('example.com/#hash_value_here')
-
-  // That's cool if you're actually sitting on example.com/, but if you at
-  // a path like example.com/some/page and you:
-
-  // location.replace('#' + hash)
-
-  // it navigate off to that base url plus the hash fragment.
-
-  // This seem obvious when you read it here, but is was a nasty gotcha
-  // if your consumer sets the damned 'base' tag.
-
-  // So anyways, here we just force it to stay local like this:
-  location.replace(window.location.pathname + window.location.search + '#' + hash)
+  location.replace('#' + hash)
 }
 
 Durl.prototype.getDeepPath = function() {
@@ -167,6 +153,8 @@ Durl.prototype.log = function(message){
 }
 
 function factory(){
+  // expose helper for debugging
+  Durl.stripDeepUrl = stripDeepUrl
   return Durl
 }
 

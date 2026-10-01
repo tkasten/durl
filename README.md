@@ -48,3 +48,9 @@ hNMMMMMMMMMMMMMMMMMMMM+:m+.dMMMMMds+    .``-` :shdyoss++-`
      `ym+.`     .sMMMMMMMh`         yMMMMMMh  /Ndo
     `hd-          oNNMMMMM+         :MMMMMMh   oy+
 ```
+
+## Development
+
+```sh
+docker build -t durl . && docker run --rm durl
+```
